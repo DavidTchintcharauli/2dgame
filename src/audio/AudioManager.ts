@@ -1,5 +1,11 @@
 type BuffersMap = Record<string, AudioBuffer>;
 
+type AudioOptions = {
+  sfxVolume: number;
+  bgmVolume: number;
+  masterVolume: number;
+};
+
 export class AudioManager {
   private ctx: AudioContext | null = null;
   private masterGain!: GainNode;
@@ -13,7 +19,10 @@ export class AudioManager {
   private inited = false;
   private loading: Promise<void> | null = null;
 
-  constructor(private opts = { sfxVolume: 0.9, bgmVolume: 0.35, masterVolume: 1 }) {}
+  private opts: AudioOptions ;
+  constructor(opts?: Partial<AudioOptions >) {
+    this.opts = { sfxVolume: 0.9, bgmVolume: 0.35, masterVolume: 1, ...opts };
+  }
 
   private async init() {
     if (this.inited) return;
